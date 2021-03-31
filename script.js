@@ -1,49 +1,51 @@
 const quizData = [
     {
-        question:'How old is Florin?',
-        a: '10',
-        b: '17',
-        c: '26',
-        d: '110',
-        correct: 'c'
+        question:'In the pilot episode, what would Ash`s pokemon be?',
+        a: 'Clefairy',
+        b: 'Pikachu',
+        c: 'Bulbasaur',
+        d: 'Charmander',
+        correct: 'a',
     }, {
-        question: 'What is the most used programming language in 2019?',
-        a: 'Java',
-        b: 'C',
-        c: 'Python',
-        d: 'JavaScrip',
-        correct: 'd'
+        question: 'In the anime series"Full Metal Alchermist", what do Alchemists consider the greatest taboo?',
+        a: 'Human Sacriffice',
+        b: 'Human Transmutation',
+        c: 'Transmutting lead into golg',
+        d: 'Homunculi',
+        correct: 'b',
     }, {
-        question: 'Who is he President of Us?',
-        a: 'Tom Brad',
-        b: 'Joe Biden',
-        c: 'Donald Trump',
-        d: 'Ivan Saldano',
-        correct: 'b'
+        question: 'In "One Piece",what does "the Pirate King" mean to the captain of the Straw Hat Pirates?',
+        a: 'Fortune',
+        b: 'Power',
+        c: 'Courage',
+        d: 'Freedom',
+        correct: 'd',
     }, {
-        question: 'What does HTML satand for?',
-        a: 'Hypertext Markup Language',
-        b: 'Casding Style Sheet',
-        c: 'Jason Object Notation',
-        d: 'Helicopters Terminals',
-        correct: 'a'
+        question: 'What sport is being played in the Anime Eyeshield 21?',
+        a: 'American Football',
+        b: 'Golf',
+        c: 'Tennis',
+        d: 'Soccer',
+        correct: 'a',
     }, {
-        question: 'What year was JavaScript launched?',
-        a: '1996',
-        b: '1997',
-        c: '1998',
+        question: 'In what year did the manga "Ping Pong" begin serialization?',
+        a: '1994',
+        b: '1995',
+        c: '1996',
         d: 'none of the above',
-        correct: 'd'
+        correct: 'c',
    
     }
 ];
 
-const questionEl = document.getElementById('question');
-const a_text = document.getElementById('a_text');
-const d_text = document.getElementById('b_text');
-const b_text = document.getElementById('c_text');
-const c_text = document.getElementById('d_text');
-const submitBtn = document.getElementById('submit');
+const quiz = document.getElementById("quiz");
+const answerEls = document.querySelectorAll(".answer");
+const questionEl = document.getElementById("question");
+const a_text = document.getElementById("a_text");
+const b_text = document.getElementById("b_text");
+const c_text = document.getElementById("c_text");
+const d_text = document.getElementById("d_text");
+const submitBtn = document.getElementById("submit");
 
 let currentQuiz = 0;
 let score = 0;
@@ -51,6 +53,8 @@ let score = 0;
 loadQuiz();
 
 function loadQuiz() {
+    deselectAnswers();
+
     const currentQuizData = quizData[currentQuiz];
 
     questionEl.innerText = currentQuizData.question;
@@ -61,28 +65,37 @@ function loadQuiz() {
 }
 
 function getSelected(){
-    const answerEls = document.querySelectorAll('answer');
-    
+    let answer = undefined;
+   
     answerEls.forEach((answerEl) => {
         if(answerEl.checked) {
-            return answerEl.id;
+            answer = answerEl.id;
         }
     });
 
-    return undefined;
+    return answer;
+}
+
+function deselectAnswers(){
+    answerEls.forEach((answerEl) => {
+        answerEl.checked = false;
+    });
 }
 
 submitBtn.addEventListener('click', () => {
-    currentQuiz++;
-
+    
     const answer = getSelected();
 
-    if(answer){
+    if(answer) {
+        if(answer === quizData[currentQuiz].correct){
+            score++;
+        }
+
+        currentQuiz++;
         if(currentQuiz < quizData.length) {
         loadQuiz();
     }else {
-        // TODO: show results
-        alert('YOU FINISHED!')
+        quiz.innerHTML = ` <h2>You answered correctly at ${score}/${quizData.length} questions.</h2> <button onclick="location.reload()">Reload</button>`;
     }
 }
 });
